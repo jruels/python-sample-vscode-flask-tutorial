@@ -7,7 +7,9 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  name: Default
+  demands:
+    - Agent.Name -equals ip-172-31-24-250
 
 strategy:
   matrix:
