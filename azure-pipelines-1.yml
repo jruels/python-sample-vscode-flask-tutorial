@@ -15,6 +15,11 @@ stages:
       demands:
         - Agent.Name -equals ip-172-31-24-250  # Replace with your agent's name
     steps:
+    - script: |
+        echo "Image Name: $(imageName)"
+        echo "Tag: $(tag)"
+        echo "Build info: $(Build.BuildId)"
+      displayName: Debug variable values
     - task: Docker@2
       displayName: Build an image
       inputs:
@@ -23,6 +28,6 @@ stages:
         tags: |
           $(Build.BuildId)
     
-    - script: |
-        docker images --filter reference=$(Build.BuildId)
-      displayName: Verify and list the new image
+#    - script: |
+#        docker images --filter "label=com.azure.dev.image.build.buildnumber=$(Build.BuildId)
+#      displayName: Verify and list the new image
