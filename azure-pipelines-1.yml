@@ -24,5 +24,5 @@ stages:
         tags: '$(Build.BuildId)'
     
     - script: |
-        docker images --filter reference=$(Build.BuildId)
+        docker images |head -2
       displayName: Verify and list the new image
