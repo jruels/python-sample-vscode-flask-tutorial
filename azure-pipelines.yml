@@ -8,8 +8,8 @@ steps:
 # Step 1: Ensure Python3 and venv are installed
 - script: |
     sudo apt update
-    sudo apt install -y python3 python3-venv
-  displayName: 'Install Python3 and venv'
+    sudo apt install -y python3-venv
+  displayName: 'Install Python3 venv'
 
 # Step 2: Checkout Code
 - task: Checkout@1
