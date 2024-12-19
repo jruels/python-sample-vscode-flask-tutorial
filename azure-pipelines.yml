@@ -5,35 +5,36 @@ pool:
   name: Default
 
 steps:
-- script: |
-    # Ensure Python 3 is available
-    python3 --version
-    pip3 --version
-  displayName: 'Verify Python Installation'
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+  displayName: 'Use Python 3.x'
 
-- script: |
-    # Create a virtual environment
-    python3 -m venv .venv
-    # Activate the virtual environment
-    source .venv/bin/activate
-    # Upgrade pip inside the virtual environment
-    python -m pip install --upgrade pip
-    # Install dependencies
-    pip install -r requirements.txt
-  displayName: 'Install Dependencies in Virtual Environment'
+- task: PythonScript@0
+  inputs:
+    scriptSource: 'inline'
+    script: |
+      python -m venv .venv
+      source .venv/bin/activate
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+  displayName: 'Setup Python Virtual Environment and Install Dependencies'
 
-- script: |
-    # Activate the virtual environment
-    source .venv/bin/activate
-    # Install additional test dependencies
-    pip install pytest pytest-azurepipelines
-    # Run tests
-    pytest
-  displayName: 'Run Tests in Virtual Environment'
+- task: PythonScript@0
+  inputs:
+    scriptSource: 'inline'
+    script: |
+      source .venv/bin/activate
+      pip install pytest pytest-azurepipelines
+      pytest
+  displayName: 'Run Tests'
 
-- script: |
-    # Clean up the virtual environment (optional)
-    deactivate
-    rm -rf .venv
+- task: PythonScript@0
+  inputs:
+    scriptSource: 'inline'
+    script: |
+      deactivate
+      rm -rf .venv
   displayName: 'Clean Up Virtual Environment'
   condition: always()
