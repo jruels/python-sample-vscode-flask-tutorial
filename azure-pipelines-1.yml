@@ -4,6 +4,10 @@ trigger:
 resources:
 - repo: self
 
+variables:
+  imageName: 'my-app'
+  tag: '$(Build.BuildId)'
+
 stages:
 - stage: Build
   displayName: Build image
