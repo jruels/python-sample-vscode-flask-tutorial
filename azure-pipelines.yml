@@ -3,16 +3,37 @@ trigger:
 
 pool:
   name: Default
-  demands:
-    - Agent.Name -equals ip-172-31-24-250
 
 steps:
 - script: |
-    python3 -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+    # Ensure Python 3 is available
+    python3 --version
+    pip3 --version
+  displayName: 'Verify Python Installation'
 
 - script: |
+    # Create a virtual environment
+    python3 -m venv .venv
+    # Activate the virtual environment
+    source .venv/bin/activate
+    # Upgrade pip inside the virtual environment
+    python -m pip install --upgrade pip
+    # Install dependencies
+    pip install -r requirements.txt
+  displayName: 'Install Dependencies in Virtual Environment'
+
+- script: |
+    # Activate the virtual environment
+    source .venv/bin/activate
+    # Install additional test dependencies
     pip install pytest pytest-azurepipelines
+    # Run tests
     pytest
-  displayName: 'Run tests'
+  displayName: 'Run Tests in Virtual Environment'
+
+- script: |
+    # Clean up the virtual environment (optional)
+    deactivate
+    rm -rf .venv
+  displayName: 'Clean Up Virtual Environment'
+  condition: always()
