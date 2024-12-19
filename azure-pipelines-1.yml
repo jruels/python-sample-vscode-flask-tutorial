@@ -4,9 +4,6 @@ trigger:
 resources:
 - repo: self
 
-variables:
-  imageName: 'my-app'
-  tag: '$(Build.BuildId)'
 
 stages:
 - stage: Build
@@ -15,23 +12,17 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      name: Default  # Replace with your self-hosted agent pool name
-      demands:
-        - Agent.Name -equals ip-172-31-24-250  # Replace with your agent's name
+      name: Default  
+      
     steps:
-    - script: |
-        echo "Image Name: $(imageName)"
-        echo "Tag: $(tag)"
-        echo "Build info: $(Build.BuildId)"
-      displayName: Debug variable values
+
     - task: Docker@2
       displayName: Build an image
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(Build.BuildId)
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(Build.BuildId)'
     
-#    - script: |
-#        docker images --filter "label=com.azure.dev.image.build.buildnumber=$(Build.BuildId)
-#      displayName: Verify and list the new image
+    - script: |
+        docker images --filter reference=$(Build.BuildId)
+      displayName: Verify and list the new image
