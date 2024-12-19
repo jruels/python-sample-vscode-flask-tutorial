@@ -29,3 +29,8 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
+    - task: Docker@2
+      displayName: Verify and list the new image
+      inputs:
+        command: images
+        arguments: '--filter reference=$(tag)'
