@@ -4,10 +4,6 @@ trigger:
 resources:
 - repo: self
 
-variables:
-  imageName: 'my-app'
-  tag: '$(Build.BuildId)'
-
 stages:
 - stage: Build
   displayName: Build image
@@ -24,8 +20,9 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: "$(imageName):$(tag)"
+        tags: |
+          $(Build.BuildId)
     
     - script: |
-        docker images --filter reference=$(imageName):$(tag)
+        docker images --filter reference=$(Build.BuildId)
       displayName: Verify and list the new image
