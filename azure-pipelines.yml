@@ -2,39 +2,31 @@ trigger:
 - main
 
 pool:
-  name: Default  # Use the name of your self-hosted agent pool
+  name: Default  # Ensure the correct pool name is specified
+
+variables:
+  system.debug: true  # Enable debug logs
 
 steps:
-# Step 1: Ensure Python3 and venv are installed
 - script: |
-    sudo apt update
-    sudo apt install -y python3-venv
+    sudo apt install -y python3.12-venv
   displayName: 'Install Python3 venv'
 
-# Step 2: Checkout Code
 - task: Checkout@1
   displayName: 'Checkout Code'
 
-# Step 3: Set up Virtual Environment
 - script: |
     python3 -m venv .venv
     source .venv/bin/activate
     pip install --upgrade pip
   displayName: 'Set Up Virtual Environment'
 
-# Step 4: Install Dependencies
 - script: |
     source .venv/bin/activate
     pip install -r requirements.txt
   displayName: 'Install Dependencies'
 
-# Step 5: Run Tests
 - script: |
     source .venv/bin/activate
     pytest
   displayName: 'Run Tests'
-
-# Step 6: Cleanup Virtual Environment (Optional)
-- script: |
-    rm -rf .venv
-  displayName: 'Cleanup Virtual Environment'
