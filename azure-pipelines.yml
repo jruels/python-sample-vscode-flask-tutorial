@@ -8,10 +8,6 @@ variables:
   system.debug: true  # Enable debug logs
 
 steps:
-- script: |
-    sudo apt install -y python3.12-venv
-  displayName: 'Install Python3 venv'
-
 - task: Checkout@1
   displayName: 'Checkout Code'
 
