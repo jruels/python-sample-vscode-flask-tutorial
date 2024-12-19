@@ -8,10 +8,14 @@ pool:
 
 steps:
 - script: |
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+    python3 -m venv .venv  # Create a virtual environment
+    source .venv/bin/activate  # Activate the virtual environment
+    pip install --upgrade pip  # Upgrade pip
+    pip install -r requirements.txt  # Install dependencies
+  displayName: 'Set Up Virtual Environment and Install Dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'Run tests'
+    source .venv/bin/activate  # Activate the virtual environment
+    pip install pytest pytest-azurepipelines  # Install test dependencies
+    pytest  # Run tests
+  displayName: 'Run Tests'
