@@ -1,7 +1,3 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - main
 
@@ -28,10 +24,8 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          "$(imageName):$(tag)""
-    - task: Docker@2
+        tags: "$(imageName):$(tag)"
+    
+    - script: |
+        docker images --filter reference=$(imageName):$(tag)
       displayName: Verify and list the new image
-      inputs:
-        command: images
-        arguments: '--filter reference=$imageName:$(tag)'
